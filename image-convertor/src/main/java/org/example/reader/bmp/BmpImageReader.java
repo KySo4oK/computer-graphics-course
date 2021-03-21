@@ -47,11 +47,14 @@ public class BmpImageReader implements ImageReader {
 
     private Pixel[] convertBmpToPixels(byte[] data, int width, int height) {
         Pixel[] pixels = new Pixel[data.length / 3];
-        int counterForPixels = 0;
+        int endZeros = (int)((Math.ceil(width * 3 / 4.0) - (width * 3 / 4.0)) * 4);
+        int pixelCounter = 0;
         for (int i = height - 1; i >= 0; i--) {
             for (int j = 0; j < width; j++) {
-                pixels[counterForPixels] = new Pixel(data[(i * width + j) * 3 + 2], data[(i * width + j) * 3 + 1], data[(i * width + j) * 3]);
-                counterForPixels++;
+                pixels[pixelCounter] = new Pixel(data[(i * width + j) * 3 + 2 + i * endZeros],
+                        data[(i * width + j) * 3 + 1 + i * endZeros],
+                        data[(i * width + j) * 3 + i * endZeros]);
+                pixelCounter++;
             }
         }
         return pixels;
