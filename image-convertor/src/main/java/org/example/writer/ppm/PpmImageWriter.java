@@ -10,6 +10,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
+import static org.example.CommandUtils.PPM;
+
 @Component
 public class PpmImageWriter implements ImageWriter {
     private static final String NEW_LINE = "\n";
@@ -19,6 +21,11 @@ public class PpmImageWriter implements ImageWriter {
     public void write(CustomImage image, String filePath) throws IOException {
         byte[] imageData = convertImage(convertImageToPpm(image));
         FileUtils.writeByteArrayToFile(new File(filePath), imageData);
+    }
+
+    @Override
+    public boolean isSupportedExtension(String extension) {
+        return extension.equalsIgnoreCase(PPM);
     }
 
     private Ppm convertImageToPpm(CustomImage image) {

@@ -1,7 +1,5 @@
 package org.example.writer.bmp;
 
-import java.io.File;
-import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.example.misc.Utils;
@@ -10,6 +8,11 @@ import org.example.model.Pixel;
 import org.example.model.bmp.Bmp;
 import org.example.writer.ImageWriter;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.IOException;
+
+import static org.example.CommandUtils.BMP;
 
 @Component
 public class BmpImageWriter implements ImageWriter {
@@ -20,6 +23,11 @@ public class BmpImageWriter implements ImageWriter {
 
         byte[] resultData = getResultData(data);
         FileUtils.writeByteArrayToFile(new File(filePath), resultData);
+    }
+
+    @Override
+    public boolean isSupportedExtension(String extension) {
+        return extension.equalsIgnoreCase(BMP);
     }
 
     public void populateBmpData(CustomImage source, Bmp target) {
