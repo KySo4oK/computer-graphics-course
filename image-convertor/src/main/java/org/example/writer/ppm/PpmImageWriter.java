@@ -5,7 +5,9 @@ import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.example.model.CustomImage;
 import org.example.writer.ImageWriter;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PpmImageWriter implements ImageWriter {
     @Override
     public void write(CustomImage image, String filePath) throws IOException {
