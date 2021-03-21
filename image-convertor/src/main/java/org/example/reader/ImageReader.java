@@ -5,5 +5,6 @@ import org.example.model.CustomImage;
 
 public interface ImageReader {
     CustomImage read(File file);
+
     boolean isSupportedExtension(String extension);
 }

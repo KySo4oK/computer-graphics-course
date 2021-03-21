@@ -1,5 +1,9 @@
 package org.example.writer.bmp;
 
+import static org.example.model.CustomImage.BMP;
+
+import java.io.File;
+import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.example.exception.UnableToWriteImageException;
@@ -9,11 +13,6 @@ import org.example.model.Pixel;
 import org.example.model.bmp.Bmp;
 import org.example.writer.ImageWriter;
 import org.springframework.stereotype.Component;
-
-import java.io.File;
-import java.io.IOException;
-
-import static org.example.model.CustomImage.BMP;
 
 @Component
 public class BmpImageWriter implements ImageWriter {

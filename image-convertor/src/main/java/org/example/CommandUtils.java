@@ -1,15 +1,14 @@
 package org.example;
 
-import org.example.exception.ExtensionNotSupportedException;
-import org.example.exception.GoalFormatMissingException;
-import org.example.exception.SourceFileMissingException;
+import static org.example.model.CustomImage.BMP;
+import static org.example.model.CustomImage.PPM;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static org.example.model.CustomImage.BMP;
-import static org.example.model.CustomImage.PPM;
+import org.example.exception.ExtensionNotSupportedException;
+import org.example.exception.GoalFormatMissingException;
+import org.example.exception.SourceFileMissingException;
 
 public class CommandUtils {
     public static final String OUTPUT = "--output";

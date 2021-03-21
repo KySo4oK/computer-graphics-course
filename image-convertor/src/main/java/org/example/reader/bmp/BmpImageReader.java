@@ -1,5 +1,9 @@
 package org.example.reader.bmp;
 
+import static org.example.model.CustomImage.BMP;
+
+import java.io.File;
+import java.util.Arrays;
 import org.apache.commons.lang3.ArrayUtils;
 import org.example.misc.Utils;
 import org.example.model.CustomImage;
@@ -9,11 +13,6 @@ import org.example.reader.ImageReader;
 import org.example.reader.common.RawByteReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.io.File;
-import java.util.Arrays;
-
-import static org.example.model.CustomImage.BMP;
 
 @Component
 public class BmpImageReader implements ImageReader {

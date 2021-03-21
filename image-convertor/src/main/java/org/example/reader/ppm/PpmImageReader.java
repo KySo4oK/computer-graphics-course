@@ -1,5 +1,11 @@
 package org.example.reader.ppm;
 
+import static org.example.model.CustomImage.PPM;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.example.exception.UnableToReadPpmException;
 import org.example.model.CustomImage;
 import org.example.model.Pixel;
@@ -8,13 +14,6 @@ import org.example.reader.ImageReader;
 import org.example.reader.common.RawByteReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static org.example.model.CustomImage.PPM;
 
 
 @Component

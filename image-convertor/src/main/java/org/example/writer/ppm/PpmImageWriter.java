@@ -1,5 +1,10 @@
 package org.example.writer.ppm;
 
+import static org.example.model.CustomImage.PPM;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.example.exception.UnableToProcessConcatBytes;
 import org.example.exception.UnableToWriteImageException;
@@ -7,12 +12,6 @@ import org.example.model.CustomImage;
 import org.example.model.ppm.Ppm;
 import org.example.writer.ImageWriter;
 import org.springframework.stereotype.Component;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-
-import static org.example.model.CustomImage.PPM;
 
 
 @Component

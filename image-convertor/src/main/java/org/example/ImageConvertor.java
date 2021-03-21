@@ -1,12 +1,11 @@
 package org.example;
 
+import java.io.File;
+import java.util.List;
 import org.example.exception.ExtensionNotSupportedException;
 import org.example.reader.ImageReader;
 import org.example.writer.ImageWriter;
 import org.springframework.stereotype.Component;
-
-import java.io.File;
-import java.util.List;
 
 @Component
 public class ImageConvertor {
