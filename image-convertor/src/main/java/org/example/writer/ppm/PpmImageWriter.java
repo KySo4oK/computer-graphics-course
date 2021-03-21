@@ -1,11 +1,10 @@
 package org.example.writer.ppm;
 
+import java.io.File;
+import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.example.model.CustomImage;
 import org.example.writer.ImageWriter;
-
-import java.io.File;
-import java.io.IOException;
 
 public class PpmImageWriter implements ImageWriter {
     @Override

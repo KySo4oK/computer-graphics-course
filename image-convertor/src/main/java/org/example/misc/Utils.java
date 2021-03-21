@@ -2,8 +2,6 @@ package org.example.misc;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import org.example.model.CustomImage;
-import org.example.model.Pixel;
 
 public class Utils {
     public static byte[] longToByteArraySize4(long value) {
