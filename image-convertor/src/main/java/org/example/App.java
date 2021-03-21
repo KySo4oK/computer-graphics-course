@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.reader.bmp.BmpImageReader;
 import org.example.reader.ppm.PpmImageReader;
+import org.example.writer.ImageWriter;
 import org.example.writer.bmp.BmpImageWriter;
 import org.example.writer.ppm.PpmImageWriter;
 import org.springframework.beans.factory.annotation.Autowired;

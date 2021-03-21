@@ -1,10 +1,14 @@
 package org.example.model.ppm;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 public class Ppm {
     public static final String DEFAULT_MAGIC_NUMBER = "P6";
     public static final int DEFAULT_MAX_COLOR_VALUE = 255;
