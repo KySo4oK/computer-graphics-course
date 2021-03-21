@@ -4,49 +4,54 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.example.misc.Utils;
+import org.example.exception.UnableToReadPpmException;
 import org.example.model.CustomImage;
+import org.example.model.Pixel;
 import org.example.model.ppm.Ppm;
 import org.example.reader.ImageReader;
-import org.example.reader.common.IRawByteReader;
+import org.example.reader.common.RawByteReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PpmImageReader implements ImageReader {
-    private static final String LEFT_PARENTHESES = "(";
-    private static final String RIGHT_PARENTHESES = ")";
-    private static final String WHITESPACE_REGEX = "\\s";
-    private static final String WHITESPACES_REGEX = "\\s+";
     private static final String METADATA_PARSE_REGEX =
-            LEFT_PARENTHESES + Ppm.MetaData.MAGIC_NUMBER.getRegex() + RIGHT_PARENTHESES +
-                    WHITESPACES_REGEX + LEFT_PARENTHESES + Ppm.MetaData.WIDTH.getRegex() + RIGHT_PARENTHESES +
-                    WHITESPACE_REGEX + LEFT_PARENTHESES + Ppm.MetaData.HEIGHT.getRegex() + RIGHT_PARENTHESES +
-                    WHITESPACE_REGEX + LEFT_PARENTHESES + Ppm.MetaData.MAX_COLOR_VALUE.getRegex() +
-                    RIGHT_PARENTHESES + WHITESPACE_REGEX;
-    private final IRawByteReader reader;
+            "(" + Ppm.MetaData.MAGIC_NUMBER.getRegex() + ")" +
+                    "\\s+" + "(" + Ppm.MetaData.WIDTH.getRegex() + ")" +
+                    "\\s" + "(" + Ppm.MetaData.HEIGHT.getRegex() + ")" +
+                    "\\s" + "(" + Ppm.MetaData.MAX_COLOR_VALUE.getRegex() +
+                    ")" + "\\s";
+    private final RawByteReader reader;
     private final PpmValidator validator;
     private File file;
 
     @Autowired
-    public PpmImageReader(IRawByteReader reader, PpmValidator validator) {
+    public PpmImageReader(RawByteReader reader, PpmValidator validator) {
         this.reader = reader;
         this.validator = validator;
     }
 
     @Override
-    public CustomImage read(File source) {
-        this.file = source;
+    public CustomImage read(File sourceFile) {
+        this.file = sourceFile;
         Ppm ppmData = convertByteToPpm();
         CustomImage image = new CustomImage();
-        populateRawData(ppmData, image);
+        writeRawImageData(ppmData, image);
         return image;
     }
 
-    private void populateRawData(Ppm source, CustomImage target) {
-        target.setWidth(source.getWidth());
-        target.setHeight(source.getHeight());
-        target.setPixels(Utils.ppmByteDataToPixels(source.getData()));
+    private void writeRawImageData(Ppm source, CustomImage targetImage) {
+        targetImage.setWidth(source.getWidth());
+        targetImage.setHeight(source.getHeight());
+        targetImage.setPixels(convertPpmToPixels(source.getData()));
+    }
+
+    private Pixel[] convertPpmToPixels(byte[] data) {
+        Pixel[] pixels = new Pixel[data.length / 3];
+        for (int i = 0; i < pixels.length; i++) {
+            pixels[i] = new Pixel(data[i * 3], data[i * 3 + 1], data[i * 3 + 2]);
+        }
+        return pixels;
     }
 
     private Ppm convertByteToPpm() {
@@ -67,7 +72,7 @@ public class PpmImageReader implements ImageReader {
             validator.validate(magicNumber, maxColorValue);
             return ppmData;
         } else {
-            throw new RuntimeException();
+            throw new UnableToReadPpmException(file);
         }
     }
 }
