@@ -12,6 +12,8 @@ import org.example.reader.common.RawByteReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static org.example.CommandUtils.BMP;
+
 @Component
 public class BmpImageReader implements ImageReader {
     private final RawByteReader reader;
@@ -31,6 +33,11 @@ public class BmpImageReader implements ImageReader {
         CustomImage image = new CustomImage();
         writeRawImageData(bmpData, image);
         return image;
+    }
+
+    @Override
+    public boolean isSupportedExtension(String extension) {
+        return extension.equalsIgnoreCase(BMP);
     }
 
     private void writeRawImageData(Bmp bmpData, CustomImage targetImage) {

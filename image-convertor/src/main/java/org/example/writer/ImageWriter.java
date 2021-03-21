@@ -5,4 +5,5 @@ import org.example.model.CustomImage;
 
 public interface ImageWriter {
     void write(CustomImage image, String filePath) throws IOException;
+    boolean isSupportedExtension(String extension);
 }
