@@ -19,7 +19,7 @@ jobs:
         with:
           java-version: 15
       - name: 'Build with Maven'
-        run: mvn package spring-boot:repackage
+        run: cd image-convertor/ && mvn package spring-boot:repackage
       - name: 'Release jar'
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
