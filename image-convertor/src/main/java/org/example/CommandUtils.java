@@ -1,8 +1,13 @@
 package org.example;
 
+import org.example.exception.ExtensionNotSupportedException;
+import org.example.exception.GoalFormatMissedException;
+import org.example.exception.SourceFileMissedException;
+
+import static org.example.model.CustomImage.BMP;
+import static org.example.model.CustomImage.PPM;
+
 public class CommandUtils {
-    public static final String PPM = "ppm";
-    public static final String BMP = "bmp";
     public static final String OUTPUT = "--output";
     public static final String GOAL_FORMAT = "--goal-format";
     public static final String SOURCE = "--source";
@@ -40,7 +45,7 @@ public class CommandUtils {
                 return arg.split(EQUALS_SIGN)[1];
             }
         }
-        throw new RuntimeException("goal-format missed");
+        throw new GoalFormatMissedException("goal-format missed");
     }
 
     private static String getSourceFileExtension(String sourceFileName) {
@@ -48,7 +53,7 @@ public class CommandUtils {
             return BMP;
         } else if (sourceFileName.endsWith(PPM)) {
             return PPM;
-        } else throw new RuntimeException("unsupported extension");
+        } else throw new ExtensionNotSupportedException("unsupported extension");
     }
 
     private static String getSourceFileName(String[] args) {
@@ -57,6 +62,6 @@ public class CommandUtils {
                 return arg.split(EQUALS_SIGN)[1];
             }
         }
-        throw new RuntimeException("source file missed");
+        throw new SourceFileMissedException("source file missed");
     }
 }

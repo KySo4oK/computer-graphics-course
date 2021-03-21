@@ -14,7 +14,8 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.example.CommandUtils.PPM;
+import static org.example.model.CustomImage.PPM;
+
 
 @Component
 public class PpmImageReader implements ImageReader {

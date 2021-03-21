@@ -1,6 +1,8 @@
 package org.example.writer.ppm;
 
 import org.apache.commons.io.FileUtils;
+import org.example.exception.UnableToProcessConcatBytes;
+import org.example.exception.UnableToWriteImageException;
 import org.example.model.CustomImage;
 import org.example.model.ppm.Ppm;
 import org.example.writer.ImageWriter;
@@ -10,7 +12,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 
-import static org.example.CommandUtils.PPM;
+import static org.example.model.CustomImage.PPM;
+
 
 @Component
 public class PpmImageWriter implements ImageWriter {
@@ -18,9 +21,13 @@ public class PpmImageWriter implements ImageWriter {
     private static final String SPACE = " ";
 
     @Override
-    public void write(CustomImage image, String filePath) throws IOException {
+    public void write(CustomImage image, String filePath) {
         byte[] imageData = convertImage(convertImageToPpm(image));
-        FileUtils.writeByteArrayToFile(new File(filePath), imageData);
+        try {
+            FileUtils.writeByteArrayToFile(new File(filePath), imageData);
+        } catch (IOException e) {
+            throw new UnableToWriteImageException(e.getMessage());
+        }
     }
 
     @Override
@@ -37,12 +44,16 @@ public class PpmImageWriter implements ImageWriter {
                 .build();
     }
 
-    private byte[] convertImage(Ppm image) throws IOException {
+    private byte[] convertImage(Ppm image) {
         byte[] header = getHeader(image);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        outputStream.write(header);
-        outputStream.write(image.getData());
+        try {
+            outputStream.write(header);
+            outputStream.write(image.getData());
+        } catch (IOException e) {
+            throw new UnableToProcessConcatBytes(e.getMessage());
+        }
 
         return outputStream.toByteArray();
     }

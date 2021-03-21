@@ -2,6 +2,7 @@ package org.example.writer.bmp;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.example.exception.UnableToWriteImageException;
 import org.example.misc.Utils;
 import org.example.model.CustomImage;
 import org.example.model.Pixel;
@@ -12,16 +13,20 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 
-import static org.example.CommandUtils.BMP;
+import static org.example.model.CustomImage.BMP;
 
 @Component
 public class BmpImageWriter implements ImageWriter {
     @Override
-    public void write(CustomImage image, String filePath) throws IOException {
+    public void write(CustomImage image, String filePath) {
         Bmp data = new Bmp();
         populateBmpData(image, data);
         byte[] resultData = getResultData(data);
-        FileUtils.writeByteArrayToFile(new File(filePath), resultData);
+        try {
+            FileUtils.writeByteArrayToFile(new File(filePath), resultData);
+        } catch (IOException e) {
+            throw new UnableToWriteImageException(e.getMessage());
+        }
     }
 
     @Override

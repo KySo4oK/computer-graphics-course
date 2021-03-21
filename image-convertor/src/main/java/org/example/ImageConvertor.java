@@ -1,15 +1,16 @@
 package org.example;
 
+import org.example.exception.ExtensionNotSupportedException;
 import org.example.reader.ImageReader;
 import org.example.writer.ImageWriter;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 @Component
 public class ImageConvertor {
+    public static final String NOT_SUPPORTED = " - not supported";
     private final List<ImageWriter> writers;
     private final List<ImageReader> readers;
 
@@ -18,7 +19,7 @@ public class ImageConvertor {
         this.readers = readers;
     }
 
-    void convertImage(final ConsoleConvertCommand convertCommand) throws IOException {
+    void convertImage(final ConsoleConvertCommand convertCommand) {
         ImageReader imageReader = getImageReader(convertCommand);
         ImageWriter imageWriter = getImageWriter(convertCommand);
         imageWriter.write(imageReader.read(new File(convertCommand.getSourceFileName())), convertCommand.getOutputFileName());
@@ -28,13 +29,13 @@ public class ImageConvertor {
         return writers.stream()
                 .filter(writer -> writer.isSupportedExtension(convertCommand.getGoalFormat()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ExtensionNotSupportedException(convertCommand.getGoalFormat() + NOT_SUPPORTED));
     }
 
     private ImageReader getImageReader(ConsoleConvertCommand convertCommand) {
         return readers.stream()
                 .filter(reader -> reader.isSupportedExtension(convertCommand.getSourceFileExtension()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ExtensionNotSupportedException(convertCommand.getSourceFileExtension() + NOT_SUPPORTED));
     }
 }

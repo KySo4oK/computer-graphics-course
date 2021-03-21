@@ -4,8 +4,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.IOException;
-
 @SpringBootApplication
 public class App implements CommandLineRunner {
     private final ImageConvertor imageConvertor;
@@ -19,8 +17,12 @@ public class App implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws IOException {
-        imageConvertor.convertImage(CommandUtils.parseConvertCommand(args));
+    public void run(String... args) {
+        try {
+            imageConvertor.convertImage(CommandUtils.parseConvertCommand(args));
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
 }
