@@ -17,13 +17,12 @@ public class BmpImageWriter implements ImageWriter {
     public void write(CustomImage image, String filePath) throws IOException {
         Bmp data = new Bmp();
         populateBmpData(image, data);
-
         byte[] resultData = getResultData(data);
         FileUtils.writeByteArrayToFile(new File(filePath), resultData);
     }
 
     public void populateBmpData(CustomImage source, Bmp target) {
-        long fileSize = source.getPixels().length * 3 + Bmp.PIXEL_DATA_OFFSET;
+        long fileSize = source.getPixels().length * 3L + Bmp.PIXEL_DATA_OFFSET;
         byte[] fileSizeInBytes = Utils.longToByteArraySize4(fileSize);
         ArrayUtils.reverse(fileSizeInBytes);
         target.setFileSize(fileSizeInBytes);
@@ -33,7 +32,7 @@ public class BmpImageWriter implements ImageWriter {
         byte[] heightInBytes = Utils.longToByteArraySize4(source.getHeight());
         ArrayUtils.reverse(heightInBytes);
         target.setHeight(heightInBytes);
-        target.setData(bmpImageToByteData(source));
+        target.setData(convertImageToBytes(source));
     }
 
     private byte[] getResultData(Bmp data) {
@@ -75,43 +74,26 @@ public class BmpImageWriter implements ImageWriter {
         return resultData;
     }
 
-    private byte[] bmpImageToByteData(CustomImage image) {
-        int countOfZeroBytesInEndOfRow = (int)
+    private byte[] convertImageToBytes(CustomImage image) {
+        int endZeros = (int)
                 ((Math.ceil(image.getWidth() * 3 / 4.0) - (image.getWidth() * 3 / 4.0)) * 4);
         byte[] resultData =
-                new byte[image.getWidth() * image.getHeight() * 3 + countOfZeroBytesInEndOfRow * image.getHeight()];
-
-        int counterForBytes = 0;
+                new byte[image.getWidth() * image.getHeight() * 3 + endZeros * image.getHeight()];
+        int byteCounter = 0;
         for (int i = image.getHeight() - 1; i >= 0; i--) {
             for (int j = 0; j < image.getWidth(); j++) {
                 Pixel pixel = image.getPixel(j, i);
-                resultData[counterForBytes] = pixel.getBlue();
-                resultData[counterForBytes + 1] = pixel.getGreen();
-                resultData[counterForBytes + 2] = pixel.getRed();
-                counterForBytes += 3;
+                resultData[byteCounter] = pixel.getBlue();
+                resultData[byteCounter + 1] = pixel.getGreen();
+                resultData[byteCounter + 2] = pixel.getRed();
+                byteCounter += 3;
             }
-
-            for (int j = 0; j < countOfZeroBytesInEndOfRow; j++) {
-                resultData[counterForBytes] = 0;
-                counterForBytes++;
-            }
-        }
-
-        return resultData;
-    }
-
-    private byte[] convertImageToBytes(CustomImage image) {
-        byte[] resultData = new byte[image.getPixels().length * 3];
-        int counterForBytes = 0;
-        for (int i = image.getHeight() - 1; i >= 0; i--) {
-            for (int j = 0; j < image.getWidth(); j++) {
-                Pixel pixel = image.getPixel(j, i);
-                resultData[counterForBytes] = pixel.getBlue();
-                resultData[counterForBytes + 1] = pixel.getGreen();
-                resultData[counterForBytes + 2] = pixel.getRed();
-                counterForBytes += 3;
+            for (int j = 0; j < endZeros; j++) {
+                resultData[byteCounter] = 0;
+                byteCounter++;
             }
         }
+
         return resultData;
     }
 }

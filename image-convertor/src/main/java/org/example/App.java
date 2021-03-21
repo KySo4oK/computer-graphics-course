@@ -1,17 +1,15 @@
 package org.example;
 
+import java.io.File;
+import java.io.IOException;
 import org.example.reader.bmp.BmpImageReader;
 import org.example.reader.ppm.PpmImageReader;
-import org.example.writer.ImageWriter;
 import org.example.writer.bmp.BmpImageWriter;
 import org.example.writer.ppm.PpmImageWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.io.File;
-import java.io.IOException;
 
 @SpringBootApplication
 public class App implements CommandLineRunner {

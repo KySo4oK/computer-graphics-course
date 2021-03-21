@@ -1,20 +1,16 @@
 package org.example.writer.ppm;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import org.example.model.CustomImage;
 import org.example.model.ppm.Ppm;
 import org.example.writer.ImageWriter;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-
 @Component
 public class PpmImageWriter implements ImageWriter {
-    private static final String NEW_LINE = "\n";
-    private static final String SPACE = " ";
-
     @Override
     public void write(CustomImage image, String filePath) throws IOException {
         byte[] imageData = convertImage(convertImageToPpm(image));
@@ -32,11 +28,9 @@ public class PpmImageWriter implements ImageWriter {
 
     private byte[] convertImage(Ppm image) throws IOException {
         byte[] header = getHeader(image);
-
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(header);
         outputStream.write(image.getData());
-
         return outputStream.toByteArray();
     }
 
@@ -45,10 +39,10 @@ public class PpmImageWriter implements ImageWriter {
     }
 
     private String buildPpmHeader(Ppm image) {
-        return image.getMagicNumber() + NEW_LINE +
-                image.getWidth() + SPACE +
-                image.getHeight() + NEW_LINE +
-                image.getMaxColorValue() + NEW_LINE;
+        return image.getMagicNumber() + "\n" +
+                image.getWidth() + " " +
+                image.getHeight() + "\n" +
+                image.getMaxColorValue() + "\n";
     }
 
     private byte[] convertImageToBytes(CustomImage image) {

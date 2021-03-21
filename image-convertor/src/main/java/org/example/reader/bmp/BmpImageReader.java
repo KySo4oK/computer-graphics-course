@@ -44,10 +44,9 @@ public class BmpImageReader implements ImageReader {
                 Utils.byteArrayToInt(width), Utils.byteArrayToInt(height)));
     }
 
-
     private Pixel[] convertBmpToPixels(byte[] data, int width, int height) {
         Pixel[] pixels = new Pixel[data.length / 3];
-        int endZeros = (int)((Math.ceil(width * 3 / 4.0) - (width * 3 / 4.0)) * 4);
+        int endZeros = (int) ((Math.ceil(width * 3 / 4.0) - (width * 3 / 4.0)) * 4);
         int pixelCounter = 0;
         for (int i = height - 1; i >= 0; i--) {
             for (int j = 0; j < width; j++) {
