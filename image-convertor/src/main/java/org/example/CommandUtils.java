@@ -1,8 +1,12 @@
 package org.example;
 
 import org.example.exception.ExtensionNotSupportedException;
-import org.example.exception.GoalFormatMissedException;
-import org.example.exception.SourceFileMissedException;
+import org.example.exception.GoalFormatMissingException;
+import org.example.exception.SourceFileMissingException;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.example.model.CustomImage.BMP;
 import static org.example.model.CustomImage.PPM;
@@ -12,6 +16,7 @@ public class CommandUtils {
     public static final String GOAL_FORMAT = "--goal-format";
     public static final String SOURCE = "--source";
     public static final String EQUALS_SIGN = "=";
+    public static final List<String> supportedFileExtensions = Stream.of(BMP, PPM).collect(Collectors.toList());
 
     private CommandUtils() {
     }
@@ -45,15 +50,13 @@ public class CommandUtils {
                 return arg.split(EQUALS_SIGN)[1];
             }
         }
-        throw new GoalFormatMissedException("goal-format missed");
+        throw new GoalFormatMissingException("missing goal-format");
     }
 
     private static String getSourceFileExtension(String sourceFileName) {
-        if (sourceFileName.endsWith(BMP)) {
-            return BMP;
-        } else if (sourceFileName.endsWith(PPM)) {
-            return PPM;
-        } else throw new ExtensionNotSupportedException("unsupported extension");
+        return supportedFileExtensions.stream().filter(sourceFileName::endsWith)
+                .findAny()
+                .orElseThrow(() -> new ExtensionNotSupportedException("unsupported extension"));
     }
 
     private static String getSourceFileName(String[] args) {
@@ -62,6 +65,6 @@ public class CommandUtils {
                 return arg.split(EQUALS_SIGN)[1];
             }
         }
-        throw new SourceFileMissedException("source file missed");
+        throw new SourceFileMissingException("missing source file");
     }
 }
