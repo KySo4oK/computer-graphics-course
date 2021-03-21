@@ -13,8 +13,4 @@ public class CustomImage {
     public Pixel getPixel(int x, int y) {
         return pixels[y * width + x];
     }
-
-    public void setPixel(Pixel pixel, int x, int y) {
-        pixels[y * width + x] = pixel;
-    }
 }

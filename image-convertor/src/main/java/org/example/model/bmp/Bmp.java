@@ -72,7 +72,6 @@ public class Bmp {
         yPixelsPerMeter = Utils.intToByteArray(DEFAULT_Y_PIXELS_PER_METER);
         totalColors = Utils.longToByteArraySize4(DEFAULT_TOTAL_COLORS);
         importantColors = Utils.longToByteArraySize4(DEFAULT_IMPORTANT_COLORS);
-
         reverseArrays();
     }
 

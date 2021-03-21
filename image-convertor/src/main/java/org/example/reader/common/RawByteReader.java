@@ -7,8 +7,7 @@ import java.nio.file.Paths;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RawByteReader implements IRawByteReader {
-    @Override
+public class RawByteReader {
     public byte[] readBytes(File source) {
         try {
             return Files.readAllBytes(Paths.get(source.toURI()));

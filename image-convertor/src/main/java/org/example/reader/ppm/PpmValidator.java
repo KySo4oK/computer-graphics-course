@@ -1,5 +1,6 @@
 package org.example.reader.ppm;
 
+import org.example.exception.PpmValidationException;
 import org.example.model.ppm.Ppm;
 import org.springframework.stereotype.Component;
 
@@ -9,10 +10,10 @@ public class PpmValidator {
 
     public void validate(String magicNumber, int maxColorValue) {
         if (!magicNumber.equals(Ppm.DEFAULT_MAGIC_NUMBER)) {
-            throw new RuntimeException();
+            throw new PpmValidationException("Magic number is incorrect");
         }
         if (maxColorValue != MAX_BITS_PER_COLOR) {
-            throw new RuntimeException();
+            throw new PpmValidationException("Max color value exceeds the limit");
         }
     }
 }

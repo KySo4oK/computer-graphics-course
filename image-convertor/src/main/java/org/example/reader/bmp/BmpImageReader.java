@@ -4,21 +4,22 @@ import java.io.File;
 import java.util.Arrays;
 import org.apache.commons.lang3.ArrayUtils;
 import org.example.misc.Utils;
+import org.example.model.Pixel;
 import org.example.model.bmp.Bmp;
 import org.example.model.CustomImage;
 import org.example.reader.ImageReader;
-import org.example.reader.common.IRawByteReader;
+import org.example.reader.common.RawByteReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BmpImageReader implements ImageReader {
-    private final IRawByteReader reader;
+    private final RawByteReader reader;
     private final BmpValidator validator;
     private File file;
 
     @Autowired
-    public BmpImageReader(IRawByteReader reader, BmpValidator validator) {
+    public BmpImageReader(RawByteReader reader, BmpValidator validator) {
         this.reader = reader;
         this.validator = validator;
     }
@@ -28,19 +29,32 @@ public class BmpImageReader implements ImageReader {
         this.file = file;
         Bmp bmpData = convertByteToBmp();
         CustomImage image = new CustomImage();
-        populateRawData(bmpData, image);
+        writeRawImageData(bmpData, image);
         return image;
     }
 
-    private void populateRawData(Bmp bmpData, CustomImage target) {
+    private void writeRawImageData(Bmp bmpData, CustomImage targetImage) {
         byte[] width = Arrays.copyOf(bmpData.getWidth(), bmpData.getWidth().length);
         ArrayUtils.reverse(width);
-        target.setWidth(Utils.byteArrayToInt(width));
+        targetImage.setWidth(Utils.byteArrayToInt(width));
         byte[] height = Arrays.copyOf(bmpData.getHeight(), bmpData.getHeight().length);
         ArrayUtils.reverse(height);
-        target.setHeight(Utils.byteArrayToInt(height));
-        target.setPixels(Utils.bmpByteDataToPixels(bmpData.getData(),
+        targetImage.setHeight(Utils.byteArrayToInt(height));
+        targetImage.setPixels(convertBmpToPixels(bmpData.getData(),
                 Utils.byteArrayToInt(width), Utils.byteArrayToInt(height)));
+    }
+
+
+    private Pixel[] convertBmpToPixels(byte[] data, int width, int height) {
+        Pixel[] pixels = new Pixel[data.length / 3];
+        int counterForPixels = 0;
+        for (int i = height - 1; i >= 0; i--) {
+            for (int j = 0; j < width; j++) {
+                pixels[counterForPixels] = new Pixel(data[(i * width + j) * 3 + 2], data[(i * width + j) * 3 + 1], data[(i * width + j) * 3]);
+                counterForPixels++;
+            }
+        }
+        return pixels;
     }
 
     private Bmp convertByteToBmp() {
