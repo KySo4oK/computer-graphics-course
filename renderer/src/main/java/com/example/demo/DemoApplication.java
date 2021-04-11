@@ -8,15 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import javax.media.j3d.Background;
-import javax.media.j3d.Bounds;
-import javax.media.j3d.Node;
-import javax.media.j3d.Shape3D;
+import javax.media.j3d.*;
+import javax.vecmath.Point3d;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.Objects;
+import java.util.*;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
@@ -32,7 +28,15 @@ public class DemoApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         Scene load = new OBJLoader().load("cow.obj");
-        Shape3D cow = ((Shape3D) load.getNamedObjects().values().stream().findAny().get());
+        Geometry cow = ((Shape3D) load.getNamedObjects().values().stream().findAny().get()).getGeometry();
+        GeometryArray geometryArray = (GeometryArray) cow;
+        int vertexCount = geometryArray.getVertexCount();
+        List<Point3d> points = new ArrayList<>();
+        for (int i = 0; i < vertexCount; i++) {
+            double[] array = new double[3];
+            geometryArray.getCoordinates(i, array);
+            points.add(new Point3d(array[0], array[1], array[2]));
+        }
 
 
 //        Triangle[] triangles = ObjLoader.parseFile(new File("cow.obj"));
