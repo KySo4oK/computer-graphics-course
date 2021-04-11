@@ -19,7 +19,20 @@ public class DemoApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         Triangle[] triangles = ObjLoader.parseFile(new File("cow.obj"));
-        System.out.println(Arrays.stream(triangles)
-                .filter(Objects::isNull).count());
+        Camera camera = new Camera();
+        Screen screen = new Screen();
+        Pixel[][] pixels = screen.pixels;
+        Vector3 origin = camera.getOrigin();
+        Vector3[][] races = new Vector3[10][10];
+        for (int i = 0; i < races.length; i++) {
+            for (int j = 0; j < races[0].length; j++) {
+                double x2 = pixels[i][j].x;
+                double y2 = pixels[i][j].y;
+                double z2 = pixels[i][j].z;
+                races[i][j] = new Vector3(x2 - origin.x, y2 - origin.y, z2 - origin.z);
+            }
+        }
+
+
     }
 }
