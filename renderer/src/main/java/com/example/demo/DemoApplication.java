@@ -5,6 +5,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 import static com.example.demo.MollerTrumbore.rayIntersectsTriangle;
@@ -22,34 +25,42 @@ public class DemoApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Triangle[] triangles = ObjLoader.parseFile(new File("cow.obj"));
+        Triangle[] triangles = ObjLoader.parseFile(new File("objects/cubes.obj"));
         Camera camera = new Camera();
         Screen screen = new Screen();
         Pixel[][] pixels = screen.pixels;
         Vector3 origin = camera.getOrigin();
         Vector3[][] races = new Vector3[pixels.length][pixels[0].length];
-        int falses = 0;
-        int trues = 0;
+        BufferedImage image = new BufferedImage(pixels.length, pixels[0].length, BufferedImage.TYPE_INT_RGB);
+        int intersctions = 0;
+        int missed = 0;
         for (int i = 0; i < races.length; i++) {
             for (int j = 0; j < races[0].length; j++) {
                 double x2 = pixels[i][j].x;//todo center
                 double y2 = pixels[i][j].y;
                 double z2 = pixels[i][j].z;
                 races[i][j] = new Vector3(x2 - origin.x, y2 - origin.y, z2 - origin.z);
+                boolean filled = false;
+
                 for (Triangle triangle : triangles) {
                     if (rayIntersectsTriangle(origin, races[i][j], triangle)) {
-                        System.out.println(races[i][j]);
-                        System.out.println(triangle);
-                        trues++;
+                        image.setRGB(j, i, Color.CYAN.getRGB());
+                        filled = true;
+                        intersctions++;
                         break;
-                    } else {
-                        falses++;
                     }
+                }
+                if (!filled) {
+//                    throw new IllegalComponentStateException();
+                    image.setRGB(j, i, Color.RED.getRGB());
+                    missed++;
+
                 }
             }
         }
-        System.out.println(trues);
-        System.out.println(falses + "falses");
+        ImageIO.write(image, "png", new File("objects/cubes.png"));
+        System.out.println(intersctions);
+        System.out.println(missed);
 
     }
 }
