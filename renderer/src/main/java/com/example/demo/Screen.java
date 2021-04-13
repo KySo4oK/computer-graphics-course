@@ -7,10 +7,10 @@ public class Screen {
     final Pixel[][] pixels;
 
     public Screen() {
-        pixels = new Pixel[10][10];
+        pixels = new Pixel[1000][1000];
         for (int i = 0; i < pixels.length; i++) {
             for (int j = 0; j < pixels[i].length; j++) {
-                pixels[i][j] = new Pixel(i, j, 4);
+                pixels[i][j] = new Pixel(i - 5, j - 5, 10);
             }
         }
     }

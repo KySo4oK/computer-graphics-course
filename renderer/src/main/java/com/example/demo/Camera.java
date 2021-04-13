@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class Camera {
     @Getter
-    Vector3 origin = new Vector3(0, 0, 5);
+    Vector3 origin = new Vector3(0, 0, 15);
     final Vector3 direction = null;
 }
