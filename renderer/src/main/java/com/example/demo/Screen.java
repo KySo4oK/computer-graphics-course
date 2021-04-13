@@ -10,7 +10,7 @@ public class Screen {
         pixels = new Pixel[10][10];
         for (int i = 0; i < pixels.length; i++) {
             for (int j = 0; j < pixels[i].length; j++) {
-                pixels[i][j] = new Pixel(i, j, 3);
+                pixels[i][j] = new Pixel(i, j, 4);
             }
         }
     }

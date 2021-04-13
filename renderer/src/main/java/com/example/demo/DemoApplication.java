@@ -1,19 +1,23 @@
 package com.example.demo;
 
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class DemoApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class, args);
+        SpringApplicationBuilder builder = new SpringApplicationBuilder(DemoApplication.class);
+
+        builder.headless(false);
+
+        ConfigurableApplicationContext context = builder.run(args);
     }
 
     @Override
@@ -32,7 +36,21 @@ public class DemoApplication implements CommandLineRunner {
                 races[i][j] = new Vector3(x2 - origin.x, y2 - origin.y, z2 - origin.z);
             }
         }
+        int falses = 0;
+        int trues = 0;
 
+        for (Vector3 race : Arrays.stream(races).flatMap(Arrays::stream).collect(Collectors.toList())) {
+            for (Triangle triangle : triangles) {
+                if (MollerTrumbore.rayIntersectsTriangle(origin, race, triangle, null)) {
+                    System.out.println(race);
+                    trues++;
+                } else {
+                    falses++;
+                }
+            }
+        }
+        System.out.println(trues);
+        System.out.println(falses + "falses");
 
     }
 }
