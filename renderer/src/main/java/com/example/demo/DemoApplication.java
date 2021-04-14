@@ -25,7 +25,8 @@ public class DemoApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Triangle[] triangles = ObjLoader.parseFile(new File("objects/cubes.obj"));
+        long before = System.nanoTime();
+        Triangle[] triangles = ObjLoader.parseFile(new File("objects/cow.obj"));
         Camera camera = new Camera();
         Screen screen = new Screen();
         Pixel[][] pixels = screen.pixels;
@@ -61,6 +62,7 @@ public class DemoApplication implements CommandLineRunner {
         ImageIO.write(image, "png", new File("objects/cubes.png"));
         System.out.println(intersctions);
         System.out.println(missed);
-
+        long after = System.nanoTime();
+        System.out.println((after - before)/(1000_000_000.0 *60.0));
     }
 }
