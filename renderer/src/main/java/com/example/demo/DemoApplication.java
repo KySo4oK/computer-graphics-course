@@ -42,10 +42,11 @@ public class DemoApplication implements CommandLineRunner {
                 double z2 = pixels[i][j].z;
                 races[i][j] = new Vector3(x2 - origin.x, y2 - origin.y, z2 - origin.z);
                 boolean filled = false;
-
+                int fixedJ = pixels[0].length - j - 1;
+                int fixedI = pixels.length - i - 1;
                 for (Triangle triangle : triangles) {
                     if (rayIntersectsTriangle(origin, races[i][j], triangle)) {
-                        image.setRGB(j, i, Color.CYAN.getRGB());
+                        image.setRGB(fixedI, fixedJ, Color.GREEN.getRGB());
                         filled = true;
                         intersctions++;
                         break;
@@ -53,7 +54,7 @@ public class DemoApplication implements CommandLineRunner {
                 }
                 if (!filled) {
 //                    throw new IllegalComponentStateException();
-                    image.setRGB(j, i, Color.RED.getRGB());
+                    image.setRGB(fixedI, fixedJ, Color.BLACK.getRGB());
                     missed++;
 
                 }
@@ -63,6 +64,6 @@ public class DemoApplication implements CommandLineRunner {
         System.out.println(intersctions);
         System.out.println(missed);
         long after = System.nanoTime();
-        System.out.println((after - before)/(1000_000_000.0 *60.0));
+        System.out.println((after - before) / (1000_000_000.0 * 60.0));
     }
 }
