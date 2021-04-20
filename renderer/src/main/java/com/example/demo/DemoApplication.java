@@ -32,7 +32,7 @@ public class DemoApplication implements CommandLineRunner {
         long before = System.nanoTime();
         Triangle[] triangles = ObjLoader.parseFile(new File("objects/cow.obj"));
         BoundingBox boundingBox = new BoundingBox(Arrays.stream(triangles).collect(Collectors.toList()));
-        Octree octree = Octree.build(boundingBox, 3);
+        Octree octree = Octree.build(boundingBox, 4);
         Camera camera = new Camera();
         Screen screen = new Screen();
         Pixel[][] pixels = screen.pixels;
@@ -77,6 +77,6 @@ public class DemoApplication implements CommandLineRunner {
         System.out.println(intersctions);
         System.out.println(missed);
         long after = System.nanoTime();
-        System.out.println((after - before) / (1000_000_000.0 * 60.0));
+        System.out.println((after - before) / (1000_000_000.0));
     }
 }

@@ -19,6 +19,9 @@ public class BoundingBox {
     private double maxY;
     private double maxZ;
     private List<Triangle> triangles = new ArrayList<>();
+    private double halfX;
+    private double halfY;
+    private double halfZ;
 
     public BoundingBox(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
         this.minX = minX;
@@ -126,9 +129,9 @@ public class BoundingBox {
     }
 
     public List<BoundingBox> divideTo8() {
-        double halfX = (minX + maxX) / 2;
-        double halfY = (minY + maxY) / 2;
-        double halfZ = (minZ + maxZ) / 2;
+        halfX = (minX + maxX) / 2;
+        halfY = (minY + maxY) / 2;
+        halfZ = (minZ + maxZ) / 2;
 
         List<BoundingBox> boundingBoxes = new ArrayList<>();
         boundingBoxes.add(new BoundingBox(minX, minY, minZ, halfX, halfY, halfZ));
@@ -193,5 +196,9 @@ public class BoundingBox {
             return false;
         }
         return true;
+    }
+
+    double distanceToBox(Vector3 origin) {
+        return Math.sqrt(Math.pow(origin.x - halfX, 2) + Math.pow(origin.y - halfY, 2) + Math.pow(origin.z - halfZ, 2));
     }
 }

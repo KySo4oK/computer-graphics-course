@@ -43,6 +43,9 @@ public class Octree {
                 }
                 return Optional.empty();
             } else {
+                List<Octree> children = this.children.stream()
+                        .sorted((b1, b2) -> (int) (b1.root.getBoundingBox().distanceToBox(origin) - b2.root.getBoundingBox().distanceToBox(origin)))
+                        .collect(Collectors.toList());
                 for (Octree child : children) {
                     boundingBox = child.root.getBoundingBox();
                     if (boundingBox.intersect(ray, origin)) {
