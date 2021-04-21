@@ -143,6 +143,7 @@ public class BoundingBox {
         boundingBoxes.add(new BoundingBox(halfX, halfY, minZ, maxX, maxY, halfZ));
         boundingBoxes.add(new BoundingBox(halfX, halfY, halfZ, maxX, maxY, maxZ));
 
+        List<Triangle> missed = new ArrayList<>();
         for (Triangle triangle : triangles) {
             boolean chosen = false;
             for (BoundingBox boundingBox : boundingBoxes) {
@@ -152,15 +153,17 @@ public class BoundingBox {
                 }
             }
             if (!chosen) {
-                throw new RuntimeException();
+                missed.add(triangle.copy());
+//                throw new RuntimeException();
             }
         }
+        this.triangles = missed;
         return boundingBoxes;
     }
 
     private boolean containsTriangle(Triangle triangle) {
         return Stream.of(triangle.v1.position, triangle.v2.position, triangle.v3.position)
-                .anyMatch(this::isPointInBox);
+                .allMatch(this::isPointInBox);
     }
 
     private boolean isPointInBox(Vector3 vector) {

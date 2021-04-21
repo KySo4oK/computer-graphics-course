@@ -33,30 +33,36 @@ public class Octree {
     }
 
     public Optional<Triangle> intersectWithRay(Vector3 ray, Vector3 origin) {
-        BoundingBox boundingBox = root.getBoundingBox();
-        if (boundingBox.intersect(ray, origin)) {
+        BoundingBox rootBoundingBox = root.getBoundingBox();
+        if (rootBoundingBox.intersect(ray, origin)) {
             if (root.isLeaf()) {
-                for (Triangle triangle : boundingBox.getTriangles()) {
-                    if (rayIntersectsTriangle(origin, ray, triangle)) {
-                        return Optional.of(triangle);
-                    }
-                }
-                return Optional.empty();
+                Optional<Triangle> triangle = intersectWithRootTriangles(ray, origin, rootBoundingBox);
+                if (triangle.isPresent()) return triangle;
             } else {
                 List<Octree> children = this.children.stream()
                         .sorted((b1, b2) -> (int) (b1.root.getBoundingBox().distanceToBox(origin) - b2.root.getBoundingBox().distanceToBox(origin)))
                         .collect(Collectors.toList());
                 for (Octree child : children) {
-                    boundingBox = child.root.getBoundingBox();
-                    if (boundingBox.intersect(ray, origin)) {
+                    BoundingBox childBoundingBox = child.root.getBoundingBox();
+                    if (childBoundingBox.intersect(ray, origin)) {
                         Optional<Triangle> triangle = child.intersectWithRay(ray, origin);
                         if (triangle.isPresent()) {
                             return triangle;
                         }
                     }
                 }
-                return Optional.empty();
-//                throw new RuntimeException("Not intersected with any triangle");
+                Optional<Triangle> triangle = intersectWithRootTriangles(ray, origin, rootBoundingBox);
+                if (triangle.isPresent()) return triangle;
+                //                throw new RuntimeException("Not intersected with any triangle");
+            }
+        }
+        return Optional.empty();
+    }
+
+    private Optional<Triangle> intersectWithRootTriangles(Vector3 ray, Vector3 origin, BoundingBox rootBoundingBox) {
+        for (Triangle triangle : rootBoundingBox.getTriangles()) {
+            if (rayIntersectsTriangle(origin, ray, triangle)) {
+                return Optional.of(triangle);
             }
         }
         return Optional.empty();
