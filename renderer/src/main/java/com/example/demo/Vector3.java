@@ -1,13 +1,17 @@
 package com.example.demo;
 
 public class Vector3 {
-    
+
     public double x, y, z;
-    
+
     public Vector3(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public Vector3 copy() {
+        return new Vector3(x, y, z);
     }
 
     public Vector3() {
@@ -28,9 +32,9 @@ public class Vector3 {
 
     public Vector3 cross(Vector3 other) {
         return new Vector3(
-            this.y * other.z - this.z * other.y,
-            this.z * other.x - this.x * other.z,
-            this.x * other.y - this.y * other.x
+                this.y * other.z - this.z * other.y,
+                this.z * other.x - this.x * other.z,
+                this.x * other.y - this.y * other.x
         );
     }
 

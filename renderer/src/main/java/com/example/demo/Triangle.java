@@ -13,6 +13,9 @@ public class Triangle {
         this.v3 = v3;
     }
 
+    public Triangle copy(){
+        return new Triangle(v1, v2, v3, material);
+    }
 //    public Vector3 toBarycentricCoordinates(Vector3 point) {
 //        Vector3 edge1 = this.v2.position.subtract(this.v1.position);
 //        Vector3 edge2 = this.v3.position.subtract(this.v1.position);
