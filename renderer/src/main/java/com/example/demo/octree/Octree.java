@@ -3,6 +3,7 @@ package com.example.demo.octree;
 import com.example.demo.Triangle;
 import com.example.demo.Vector3;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,9 +41,9 @@ public class Octree {
                 Optional<Triangle> triangle = intersectWithRootTriangles(ray, origin, rootBoundingBox);
                 if (triangle.isPresent()) return triangle;
             } else {
-                List<Octree> children = this.children.stream()
-                        .sorted((b1, b2) -> (int) (b1.root.getBoundingBox().distanceToBox(origin) - b2.root.getBoundingBox().distanceToBox(origin)))
-                        .collect(Collectors.toList());
+/*                List<Octree> children = this.children.stream()
+                        .sorted(Comparator.comparingDouble(b -> b.root.getBoundingBox().distanceToBox(origin)))
+                        .collect(Collectors.toList());*/
                 for (Octree child : children) {
                     BoundingBox childBoundingBox = child.root.getBoundingBox();
                     if (childBoundingBox.intersect(ray, origin)) {
@@ -62,8 +63,7 @@ public class Octree {
 
     private Optional<Triangle> intersectWithRootTriangles(Vector3 ray, Vector3 origin, BoundingBox rootBoundingBox) {
 /*        List<Triangle> triangles = rootBoundingBox.getTriangles().stream()
-                .sorted((t1, t2) ->
-                        (int) (t2.v2.position.distanceTo(origin)- t1.v2.position.distanceTo(origin)))
+                .sorted(Comparator.comparingDouble(t -> t.getCenterPoint().distanceTo(origin)))
                 .collect(Collectors.toList());*/
         for (Triangle triangle : rootBoundingBox.getTriangles()) {
             if (rayIntersectsTriangle(origin, ray, triangle)) {

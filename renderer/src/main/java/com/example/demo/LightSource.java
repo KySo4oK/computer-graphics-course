@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LightSource {
-    Vector3 location = new Vector3(10, 0, 0);
+    Vector3 location = new Vector3(0, 0.7, 0);
 }

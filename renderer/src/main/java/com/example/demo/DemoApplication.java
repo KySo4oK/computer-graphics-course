@@ -32,7 +32,7 @@ public class DemoApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         long before = System.nanoTime();
-        LightSource ls = new LightSource();
+        LightSource light = new LightSource();
         Triangle[] triangles = ObjLoader.parseFile(new File("/home/ivan/IdeaProjects/computer-graphics-course/renderer/objects/cow.obj"));
         BoundingBox boundingBox = new BoundingBox(Arrays.stream(triangles).collect(Collectors.toList()));
         Octree octree = Octree.build(boundingBox, 4);
@@ -53,51 +53,50 @@ public class DemoApplication implements CommandLineRunner {
                 boolean filled = false;
                 int fixedJ = pixels[0].length - j - 1;
                 int fixedI = pixels.length - i - 1;
-                /*for (Triangle triangle : triangles) {
+               /* for (Triangle triangle : triangles) {
                     if (rayIntersectsTriangle(origin, races[i][j], triangle)) {
                         Vector3 triangleCenter = triangle.getCenterPoint();
                         // найти нормаль к треугольнику
                         Vector3 normal = triangle.normal(triangleCenter);
                         Vector3 lightDirection = new Vector3(
-                                ls.location.x - triangleCenter.x,
-                                ls.location.y - triangleCenter.y,
-                                ls.location.z - triangleCenter.z);
+                                light.location.x - triangleCenter.x,
+                                light.location.y - triangleCenter.y,
+                                light.location.z - triangleCenter.z);
+                        Vector3 lightDirection1 = new Vector3(
+                                triangleCenter.x - light.location.x,
+                                triangleCenter.y - light.location.y,
+                                triangleCenter.z - light.location.z);
                         Vector3 subtracted = lightDirection.subtract(normal);
-                        double cos = (pow(lightDirection.magnitude(), 2) + pow(normal.magnitude(), 2) - pow(subtracted.magnitude(), 2)) / (2 * lightDirection.magnitude() * normal.magnitude());
-                        // distance from triangle to source
-                        // LS.direction.length ^ 2 * normal.length ^ 2  *  LS.location ^ 2 - triangleCenter ^ 2 - хуйня
-                        // baseColor * intensivity
+                        double cos = (pow(lightDirection.magnitude(), 2) + pow(normal.magnitude(), 2) - pow(subtracted.magnitude(), 2))
+                                / (2 * lightDirection.magnitude() * normal.magnitude());
                         double intensity = Math.max(0.1, cos);
-
                         image.setRGB(fixedI, fixedJ, multiplyColor(new Color(0, 255, 255), intensity).getRGB());
+                        intersctions++;
                         filled = true;
                         intersctions++;
                         break;
+                    } else {
+                        image.setRGB(fixedI, fixedJ, Color.RED.getRGB());
                     }
                 }*/
                 Optional<Triangle> visibleTriangleOpt = octree.intersectWithRay(races[i][j], origin);
                 if (visibleTriangleOpt.isPresent()) {
                     Triangle visibleTriangle = visibleTriangleOpt.get();
                     Vector3 triangleCenter = visibleTriangle.getCenterPoint();
-                    // найти нормаль к треугольнику
                     Vector3 normal = visibleTriangle.normal(triangleCenter);
                     Vector3 lightDirection = new Vector3(
-                            ls.location.x - triangleCenter.x,
-                            ls.location.y - triangleCenter.y,
-                            ls.location.z - triangleCenter.z);
-                    Vector3 lightDirection1 = new Vector3(
-                            triangleCenter.x - ls.location.x,
-                            triangleCenter.y - ls.location.y,
-                            triangleCenter.z - ls.location.z);
+                            light.location.x - triangleCenter.x,
+                            light.location.y - triangleCenter.y,
+                            light.location.z - triangleCenter.z);
                     Vector3 subtracted = lightDirection.subtract(normal);
                     double cos = (pow(lightDirection.magnitude(), 2) + pow(normal.magnitude(), 2) - pow(subtracted.magnitude(), 2))
                             / (2 * lightDirection.magnitude() * normal.magnitude());
-                    double intensity = Math.max(0.1, cos);
+                    double intensity = Math.max(0.3, cos);
 
                     image.setRGB(fixedI, fixedJ, multiplyColor(new Color(0, 255, 255), intensity).getRGB());
                     intersctions++;
                 } else {
-                    image.setRGB(fixedI, fixedJ, Color.BLACK.getRGB());
+                    image.setRGB(fixedI, fixedJ, Color.RED.getRGB());
                     missed++;
                 }
 //                if (!filled) {
