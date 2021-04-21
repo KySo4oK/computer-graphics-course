@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.demo.MollerTrumbore.rayIntersectsTriangle;
+import static java.lang.Math.ceil;
 import static java.util.Collections.emptyList;
 
 public class Octree {
@@ -60,6 +61,10 @@ public class Octree {
     }
 
     private Optional<Triangle> intersectWithRootTriangles(Vector3 ray, Vector3 origin, BoundingBox rootBoundingBox) {
+/*        List<Triangle> triangles = rootBoundingBox.getTriangles().stream()
+                .sorted((t1, t2) ->
+                        (int) (t2.v2.position.distanceTo(origin)- t1.v2.position.distanceTo(origin)))
+                .collect(Collectors.toList());*/
         for (Triangle triangle : rootBoundingBox.getTriangles()) {
             if (rayIntersectsTriangle(origin, ray, triangle)) {
                 return Optional.of(triangle);

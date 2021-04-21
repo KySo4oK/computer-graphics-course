@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
+import static java.lang.Math.*;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -202,6 +203,6 @@ public class BoundingBox {
     }
 
     double distanceToBox(Vector3 origin) {
-        return Math.sqrt(Math.pow(origin.x - halfX, 2) + Math.pow(origin.y - halfY, 2) + Math.pow(origin.z - halfZ, 2));
+        return sqrt(pow(origin.x - halfX, 2) + pow(origin.y - halfY, 2) + pow(origin.z - halfZ, 2));
     }
 }
