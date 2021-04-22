@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
+import static java.lang.Math.*;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
@@ -72,60 +73,8 @@ public class BoundingBox {
         triangles.add(triangle);
     }
 
-    public double getMinX() {
-        return minX;
-    }
-
-    public void setMinX(double minX) {
-        this.minX = minX;
-    }
-
-    public double getMinY() {
-        return minY;
-    }
-
-    public void setMinY(double minY) {
-        this.minY = minY;
-    }
-
-    public double getMinZ() {
-        return minZ;
-    }
-
-    public void setMinZ(double minZ) {
-        this.minZ = minZ;
-    }
-
-    public double getMaxX() {
-        return maxX;
-    }
-
-    public void setMaxX(double maxX) {
-        this.maxX = maxX;
-    }
-
-    public double getMaxY() {
-        return maxY;
-    }
-
-    public void setMaxY(double maxY) {
-        this.maxY = maxY;
-    }
-
-    public double getMaxZ() {
-        return maxZ;
-    }
-
-    public void setMaxZ(double maxZ) {
-        this.maxZ = maxZ;
-    }
-
     public List<Triangle> getTriangles() {
         return triangles;
-    }
-
-    public void setTriangles(List<Triangle> triangles) {
-        this.triangles = triangles;
     }
 
     public List<BoundingBox> divideTo8() {
@@ -154,7 +103,6 @@ public class BoundingBox {
             }
             if (!chosen) {
                 missed.add(triangle.copy());
-//                throw new RuntimeException();
             }
         }
         this.triangles = missed;
@@ -173,12 +121,11 @@ public class BoundingBox {
     }
 
     public boolean intersect(Vector3 ray, Vector3 origin) {
-        // r.dir is unit direction vector of ray
+
         double dirfracX = 1.0f / ray.x;
         double dirfracY = 1.0f / ray.y;
         double dirfracZ = 1.0f / ray.z;
-// lb is the corner of AABB with minimal coordinates - left bottom, rt is maximal corner
-// r.org is origin of ray
+
         double t1 = (minX - origin.x) * dirfracX;
         double t2 = (maxX - origin.x) * dirfracX;
         double t3 = (minY - origin.y) * dirfracY;
@@ -189,12 +136,10 @@ public class BoundingBox {
         double tmin = max(max(min(t1, t2), min(t3, t4)), min(t5, t6));
         double tmax = min(min(max(t1, t2), max(t3, t4)), max(t5, t6));
 
-// if tmax < 0, ray (line) is intersecting AABB, but the whole AABB is behind us
         if (tmax < 0) {
             return false;
         }
 
-// if tmin > tmax, ray doesn't intersect AABB
         if (tmin > tmax) {
             return false;
         }
@@ -202,6 +147,6 @@ public class BoundingBox {
     }
 
     double distanceToBox(Vector3 origin) {
-        return Math.sqrt(Math.pow(origin.x - halfX, 2) + Math.pow(origin.y - halfY, 2) + Math.pow(origin.z - halfZ, 2));
+        return sqrt(pow(origin.x - halfX, 2) + pow(origin.y - halfY, 2) + pow(origin.z - halfZ, 2));
     }
 }
