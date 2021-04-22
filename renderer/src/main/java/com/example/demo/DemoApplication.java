@@ -31,9 +31,10 @@ public class DemoApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        ConsoleConvertCommand consoleConvertCommand = CommandUtils.parseConvertCommand(args);
         long before = System.nanoTime();
         LightSource light = new LightSource();
-        Triangle[] triangles = ObjLoader.parseFile(new File("objects/cow.obj"));
+        Triangle[] triangles = ObjLoader.parseFile(new File(consoleConvertCommand.getSourceFileName()));
         BoundingBox boundingBox = new BoundingBox(Arrays.stream(triangles).collect(Collectors.toList()));
         Octree octree = Octree.build(boundingBox, 4);
         Camera camera = new Camera();
@@ -107,7 +108,7 @@ public class DemoApplication implements CommandLineRunner {
 //                }
             }
         }
-        ImageIO.write(image, "png", new File("objects/cow.png"));
+        ImageIO.write(image, "png", new File(consoleConvertCommand.getOutputFileName()));
         System.out.println(intersctions);
         System.out.println(missed);
         long after = System.nanoTime();
