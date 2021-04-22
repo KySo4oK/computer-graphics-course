@@ -1,8 +1,9 @@
 name: Build and release ray tracing renderer
 
 on:
-  pull_request:
-    branches: [ master ]
+  push:
+    tags:
+      - v*
   
   workflow_dispatch:
 
