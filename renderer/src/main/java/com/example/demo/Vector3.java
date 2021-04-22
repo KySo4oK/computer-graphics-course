@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 public class Vector3 {
 
     public double x, y, z;
@@ -19,44 +22,44 @@ public class Vector3 {
     }
 
     public Vector3 add(Vector3 other) {
-        return new Vector3(this.x + other.x, this.y + other.y, this.z + other.z);
+        return new Vector3(x + other.x, y + other.y, z + other.z);
     }
 
     public Vector3 subtract(Vector3 other) {
-        return new Vector3(this.x - other.x, this.y - other.y, this.z - other.z);
+        return new Vector3(x - other.x, y - other.y, z - other.z);
     }
 
     public double dot(Vector3 other) {
-        return this.x * other.x + this.y * other.y + this.z * other.z;
+        return x * other.x + y * other.y + z * other.z;
     }
 
     public Vector3 cross(Vector3 other) {
         return new Vector3(
-                this.y * other.z - this.z * other.y,
-                this.z * other.x - this.x * other.z,
-                this.x * other.y - this.y * other.x
+                y * other.z - z * other.y,
+                z * other.x - x * other.z,
+                x * other.y - y * other.x
         );
     }
 
     public Vector3 multiply(Vector3 other) {
-        return new Vector3(this.x * other.x, this.y * other.y, this.z * other.z);
+        return new Vector3(x * other.x, y * other.y, z * other.z);
     }
 
     public Vector3 multiply(double scalar) {
-        return new Vector3(this.x * scalar, this.y * scalar, this.z * scalar);
+        return new Vector3(x * scalar, y * scalar, z * scalar);
     }
 
     public Vector3 inverse() {
-        return this.multiply(-1);
+        return multiply(-1);
     }
 
-    public double norm() {
-        return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    public double magnitude() {
+        return sqrt(x * x + y * y + z * z);
     }
 
     public Vector3 normalize() {
-        double norm = this.norm();
-        return this.multiply(1 / norm);
+        double norm = magnitude();
+        return multiply(1 / norm);
     }
 
     public Vector3 clamp(double min, double max) {
@@ -66,8 +69,12 @@ public class Vector3 {
         return new Vector3(x, y, z);
     }
 
+    public double distanceTo(Vector3 other) {
+        return sqrt(pow(other.x - x, 2) + pow(other.y - y, 2) + pow(other.z - z, 2));
+    }
+
     public String toString() {
-        return String.format("(%3.2f, %3.2f, %3.2f)", this.x, this.y, this.z);
+        return String.format("(%3.2f, %3.2f, %3.2f)", x, y, z);
     }
 
 }
