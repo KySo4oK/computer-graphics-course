@@ -33,7 +33,7 @@ public class DemoApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         long before = System.nanoTime();
         LightSource light = new LightSource();
-        Triangle[] triangles = ObjLoader.parseFile(new File("/home/ivan/IdeaProjects/computer-graphics-course/renderer/objects/cow.obj"));
+        Triangle[] triangles = ObjLoader.parseFile(new File("objects/cow.obj"));
         BoundingBox boundingBox = new BoundingBox(Arrays.stream(triangles).collect(Collectors.toList()));
         Octree octree = Octree.build(boundingBox, 4);
         Camera camera = new Camera();
@@ -96,7 +96,7 @@ public class DemoApplication implements CommandLineRunner {
                     image.setRGB(fixedI, fixedJ, multiplyColor(new Color(0, 255, 255), intensity).getRGB());
                     intersctions++;
                 } else {
-                    image.setRGB(fixedI, fixedJ, Color.RED.getRGB());
+                    image.setRGB(fixedI, fixedJ, Color.BLACK.getRGB());
                     missed++;
                 }
 //                if (!filled) {
@@ -107,7 +107,7 @@ public class DemoApplication implements CommandLineRunner {
 //                }
             }
         }
-        ImageIO.write(image, "png", new File("/home/ivan/IdeaProjects/computer-graphics-course/renderer/objects/cow.png"));
+        ImageIO.write(image, "png", new File("objects/cow.png"));
         System.out.println(intersctions);
         System.out.println(missed);
         long after = System.nanoTime();

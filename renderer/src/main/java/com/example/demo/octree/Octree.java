@@ -13,9 +13,9 @@ import static java.lang.Math.ceil;
 import static java.util.Collections.emptyList;
 
 public class Octree {
-    private OctreeNode root;
-    private int depth;
-    private List<Octree> children;
+    private final OctreeNode root;
+    private final int depth;
+    private final List<Octree> children;
 
     private Octree(OctreeNode root, int depth, List<Octree> children) {
         this.root = root;
@@ -36,40 +36,46 @@ public class Octree {
 
     public Optional<Triangle> intersectWithRay(Vector3 ray, Vector3 origin) {
         BoundingBox rootBoundingBox = root.getBoundingBox();
+        Triangle goal = null;
+        double minDistance = Double.MAX_VALUE;
         if (rootBoundingBox.intersect(ray, origin)) {
             if (root.isLeaf()) {
-                Optional<Triangle> triangle = intersectWithRootTriangles(ray, origin, rootBoundingBox);
-                if (triangle.isPresent()) return triangle;
+                for (Triangle triangle : rootBoundingBox.getTriangles()) {
+                    if (rayIntersectsTriangle(origin, ray, triangle)) {
+                        double distanceToOrigin = triangle.distanceToOrigin(origin);
+                        if (minDistance > distanceToOrigin) {
+                            goal = triangle;
+                            minDistance = distanceToOrigin;
+                        }
+                    }
+                }
+                return Optional.ofNullable(goal);
             } else {
-/*                List<Octree> children = this.children.stream()
-                        .sorted(Comparator.comparingDouble(b -> b.root.getBoundingBox().distanceToBox(origin)))
-                        .collect(Collectors.toList());*/
                 for (Octree child : children) {
                     BoundingBox childBoundingBox = child.root.getBoundingBox();
                     if (childBoundingBox.intersect(ray, origin)) {
                         Optional<Triangle> triangle = child.intersectWithRay(ray, origin);
                         if (triangle.isPresent()) {
-                            return triangle;
+                            double distanceToOrigin = triangle.get().distanceToOrigin(origin);
+                            if (minDistance > distanceToOrigin) {
+                                goal = triangle.get();
+                                minDistance = distanceToOrigin;
+                            }
                         }
                     }
                 }
-                Optional<Triangle> triangle = intersectWithRootTriangles(ray, origin, rootBoundingBox);
-                if (triangle.isPresent()) return triangle;
-                //                throw new RuntimeException("Not intersected with any triangle");
+                for (Triangle triangle : rootBoundingBox.getTriangles()) {
+                    if (rayIntersectsTriangle(origin, ray, triangle)) {
+                        double distanceToOrigin = triangle.distanceToOrigin(origin);
+                        if (minDistance > distanceToOrigin) {
+                            goal = triangle;
+                            minDistance = distanceToOrigin;
+                        }
+                    }
+                }
             }
         }
-        return Optional.empty();
+        return Optional.ofNullable(goal);
     }
 
-    private Optional<Triangle> intersectWithRootTriangles(Vector3 ray, Vector3 origin, BoundingBox rootBoundingBox) {
-/*        List<Triangle> triangles = rootBoundingBox.getTriangles().stream()
-                .sorted(Comparator.comparingDouble(t -> t.getCenterPoint().distanceTo(origin)))
-                .collect(Collectors.toList());*/
-        for (Triangle triangle : rootBoundingBox.getTriangles()) {
-            if (rayIntersectsTriangle(origin, ray, triangle)) {
-                return Optional.of(triangle);
-            }
-        }
-        return Optional.empty();
-    }
 }
